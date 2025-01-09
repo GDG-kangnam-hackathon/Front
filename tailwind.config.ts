@@ -17,6 +17,7 @@ export default {
         pretendard: ['Pretendard'],
       },
       colors: {
+        'custom-pink': '#F587A0',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -76,6 +77,9 @@ export default {
           '0%': { opacity: '1', transform: 'translateY(0)' },
           '100%': { opacity: '0', transform: 'translateY(20px)' },
         },
+      },
+      backgroundImage: {
+        'paper-texture': "url('/images/paper-texture.svg')",
       },
     },
   },
