@@ -49,13 +49,13 @@ const Calendar = ({ currentDate }: CalendarProps) => {
   const calendar = getDaysInMonth(year, month)
 
   return (
-    <div className="flex flex-col max-w-[32.5rem] w-full">
+    <div className="flex flex-col w-full">
       {/* 요일 헤더 */}
-      <div className="flex justify-center">
+      <div className="flex w-full justify-between px-3">
         {yoil.map((day) => (
           <div
             key={day}
-            className={`border-t border-b border-r border-[#E0E0E0] font-nanum text-[#393939] px-6 py-1 text-[26px] ${day === 'Sa' ? 'border-r-0' : ''}`}
+            className={`border-t border-b border-r border-[#E0E0E0] font-nanum text-[#393939] w-full py-1 text-[26px] ${day === 'Sa' ? 'border-r-0' : ''}`}
           >
             {day}
           </div>
