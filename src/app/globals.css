@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -69,4 +71,41 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@font-face {
+  font-family: 'Nanum JungHagSaeng';
+  src: url('/fonts/Nanum_JungHagSaeng.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'KoPubWorldBatang';
+  src: url('/fonts/KoPubWorldBatang_Light.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'KoPubWorldBatang';
+  src: url('/fonts/KoPubWorldBatang_Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'KoPubWorldBatang';
+  src: url('/fonts/KoPubWorldBatang_Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/Pretendard-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/Pretendard-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
 }

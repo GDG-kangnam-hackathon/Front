@@ -10,7 +10,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Noto Sans KR', 'sans-serif'],
+        nanum: ['Nanum JungHagSaeng'],
+        inter: ['Inter'],
+        kopub: ['KoPubWorldBatang'],
+        pretendard: ['Pretendard'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -61,5 +64,6 @@ export default {
       },
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require('tailwindcss-animate')],
 } satisfies Config
