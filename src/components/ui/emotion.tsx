@@ -4,9 +4,13 @@ type Emotion = 'Input' | 'Sad' | 'Happy' | 'Angry' | 'Normal' | 'Interest'
 
 interface EmotionImageProps {
   emotion: Emotion
+  showText?: boolean // 텍스트 표시 여부를 결정하는 옵션
 }
 
-const EmotionImage: React.FC<EmotionImageProps> = ({ emotion }) => {
+const EmotionImage: React.FC<EmotionImageProps> = ({
+  emotion,
+  showText = true,
+}) => {
   const emotionImages: Record<Emotion, string> = {
     Input: '/images/Input.svg',
     Sad: '/images/sad.svg',
@@ -32,7 +36,9 @@ const EmotionImage: React.FC<EmotionImageProps> = ({ emotion }) => {
         alt={emotion}
         className="w-[5rem] h-[5rem] object-contain"
       />
-      <p className="mt-2 text-lg font-semibold">{emotionTexts[emotion]}</p>
+      {showText && (
+        <p className="mt-2 text-lg font-semibold">{emotionTexts[emotion]}</p>
+      )}
     </div>
   )
 }

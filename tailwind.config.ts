@@ -14,6 +14,7 @@ export default {
         sans: ['Noto Sans KR', 'sans-serif'],
       },
       colors: {
+        'custom-pink': '#F587A0',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
