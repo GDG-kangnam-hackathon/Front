@@ -14,22 +14,54 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String?
-  email     String   @unique
-  image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
-  items Item[]
+  diaries   Diary[]                // 일기와의 관계 (1:N)
+  recommendations Recommendation[] // 진로 추천과의 관계 (1:N)
 }
-model Item {
-  id        String   @id @default(cuid())
-  title     String
-  content   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
-  userId    String   
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Diary {
+  id           String   @id @default(uuid())
+  userId       String   // Foreign Key
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content      String
+  emotionType  String   // 감정 유형 (예: 행복, 슬픔, 분노 등)
+  emotionScore Int      // 감정 점수 (1~10 등)
+  reason       String?  // 감정의 이유 (Optional)
+  date    DateTime
+}
+
+model Recommendation {
+  id               String   @id @default(uuid())
+  userId           String 
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recommendedSectors RecommendationSector[] // 직업 계통과의 관계 (1:N)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model RecommendationSector {
+  id           String   @id @default(uuid())
+  recommendationId String 
+  recommendation   Recommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+  sectorName   String   // 직업 계통 이름 (예: 이공계, 인문계 등)
+  fitPercentage Float   // 해당 계통의 적합도 백분율 (0~100)
+  reasoning    String   // 추천 근거
+  recommendedJobs RecommendationJob[] // 추천된 직업 리스트와의 관계 (1:N)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model RecommendationJob {
+  id           String   @id @default(uuid())
+  sectorId     String   
+  sector       RecommendationSector @relation(fields: [sectorId], references: [id], onDelete: Cascade)
+  jobName      String   // 추천된 직업 이름 (예: 소프트웨어 엔지니어)
+  jobDescription String? // 직업 설명 (Optional)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
