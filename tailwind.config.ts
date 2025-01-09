@@ -74,6 +74,9 @@ export default {
           '100%': { opacity: '0', transform: 'translateY(20px)' },
         },
       },
+      backgroundImage: {
+        'paper-texture': "url('/images/paper-texture.svg')",
+      },
     },
   },
   plugins: [tailwindcssAnimate],
