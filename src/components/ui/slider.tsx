@@ -18,6 +18,7 @@ const Slider: React.FC<SliderProps> = ({ max, onChange }) => {
 
   return (
     <div className="relative w-full items-center">
+      {/* 슬라이더 트랙 */}
       <div className="w-full h-1 bg-gray-300 rounded-full relative">
         <div
           className="absolute h-1 bg-custom-green rounded-full"
@@ -28,30 +29,34 @@ const Slider: React.FC<SliderProps> = ({ max, onChange }) => {
           {Array.from({ length: max + 1 }, (_, i) => (
             <div
               key={i}
-              className={`absolute top-0.5 h-[20px] w-[20px] rounded-full transform -translate-y-1/2 ${i <= value ? 'bg-custom-green' : 'bg-gray-400'}`}
+              className={`absolute top-0.5 h-[20px] w-[20px] rounded-full transform -translate-y-1/2 ${
+                i <= value ? 'bg-custom-green' : 'bg-gray-400'
+              }`}
               style={{ left: `${(i / max) * 100}%` }}
             ></div>
           ))}
         </div>
       </div>
 
+      {/* 슬라이더 핸들 및 점수 표시 */}
       <div
-        className="ml-3 top-6 absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
+        className="ml-[5px] top-[-12px] absolute flex flex-col items-center -translate-x-1/2"
         style={{ left: `${(value / max) * 100}%` }}
       >
         <div className="h-[30px] w-[30px] bg-custom-green border-2 border-white rounded-full"></div>
-        <div className="relative ">
+        <div className="relative">
           <img
             src="./images/union.svg"
             alt="점수 말풍선"
             className="h-11 w-11"
           />
-          <span className="font-nanum text-2xl font-normal leading-normal mr-1 absolute inset-0 flex items-center justify-center text-xs text-gray-700 font-semibold">
+          <span className="absolute inset-0 flex items-center justify-center text-xs text-gray-700 font-semibold">
             {value}점
           </span>
         </div>
       </div>
 
+      {/* 숨겨진 range input */}
       <input
         type="range"
         min="0"
@@ -59,7 +64,7 @@ const Slider: React.FC<SliderProps> = ({ max, onChange }) => {
         step="1"
         value={value}
         onChange={handleChange}
-        className="absolute w-full h-2 opacity-0"
+        className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
       />
     </div>
   )
