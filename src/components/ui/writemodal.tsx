@@ -52,7 +52,7 @@ const WriteModal: React.FC<WriteModalProps> = ({
 
       const newDiary = await response.json()
       onDiaryUpdate({ date: newDiary.date, emotionType: newDiary.emotionType })
-      handleCloseModal()
+      location.reload() // 페이지 새로고침
     } catch (error) {
       console.error('Error submitting form:', error)
     }
