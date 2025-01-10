@@ -1,21 +1,47 @@
 import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
 
-export async function GET() {
-  const now = new Date()
-  const stratMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-  const endMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+export async function GET(req: Request) {
+  const url = new URL(req.url)
+  const day = url.searchParams.get('day')
 
-  const diarys = await prisma.diary.findMany({
+  console.log(day)
+
+  const targetDate = new Date(day as string)
+
+  console.log('target: ', targetDate)
+
+  const startOfDay = new Date(
+    targetDate.getFullYear(),
+    targetDate.getMonth(),
+    1,
+    0,
+    0,
+    0,
+  )
+
+  const endOfDay = new Date(
+    targetDate.getFullYear(),
+    targetDate.getMonth() + 1,
+    0,
+    23,
+    59,
+    59,
+  )
+
+  const diaries = await prisma.diary.findMany({
     where: {
       userId: process.env.NEXT_PUBLIC_USER_ID,
       date: {
-        gte: stratMonth,
-        lte: endMonth,
+        gte: startOfDay,
+        lte: endOfDay,
       },
     },
+    orderBy: {
+      date: 'asc',
+    },
   })
-  return NextResponse.json(diarys)
+  return NextResponse.json(diaries)
 }
 export async function POST(req: Request) {
   const { date, content, emotionType, emotionScore, reason } = await req.json()

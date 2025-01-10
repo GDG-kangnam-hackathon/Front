@@ -21,7 +21,12 @@ const Calendar = ({ currentDate }: CalendarProps) => {
   useEffect(() => {
     const fetchDiaryData = async () => {
       try {
-        const response = await fetch('/api/diary')
+        const response = await fetch(
+          `/api/diary?day=${encodeURIComponent(currentDate.format('YYYY-MM'))}`,
+          {
+            method: 'GET',
+          },
+        )
         if (!response.ok) throw new Error('Failed to fetch data')
         const result = await response.json()
 
@@ -40,7 +45,29 @@ const Calendar = ({ currentDate }: CalendarProps) => {
     }
 
     fetchDiaryData()
-  }, [])
+  }, [currentDate])
+
+  const handleDiaryUpdate = (newDiary: {
+    date: string
+    emotionType: string
+  }) => {
+    setDiaryData((prev) => ({
+      ...prev,
+      [dayjs(newDiary.date).format('YYYY-MM-DD')]: newDiary.emotionType,
+    }))
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
 
   const getDaysInMonth = (year: number, month: number) => {
     const firstDayOfMonth = new Date(year, month, 1).getDay()
@@ -147,7 +174,13 @@ const Calendar = ({ currentDate }: CalendarProps) => {
       </div>
 
       {/* WriteModal */}
-      {isOpen && <WriteModal initialDate={selectedDate} onClose={closeModal} />}
+      {isOpen && (
+        <WriteModal
+          initialDate={selectedDate}
+          onClose={closeModal}
+          onDiaryUpdate={handleDiaryUpdate}
+        />
+      )}
     </div>
   )
 }

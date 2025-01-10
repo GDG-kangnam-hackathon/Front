@@ -13,7 +13,12 @@ const Home = () => {
   useEffect(() => {
     const fetchDiaries = async () => {
       try {
-        const response = await fetch('/api/diary', { method: 'GET' })
+        const response = await fetch(
+          `/api/diary?day=${encodeURIComponent(currentDate.format('YYYY-MM'))}`,
+          {
+            method: 'GET',
+          },
+        )
         if (!response.ok) {
           throw new Error('Failed to fetch diaries')
         }
@@ -25,7 +30,7 @@ const Home = () => {
     }
 
     fetchDiaries()
-  }, [])
+  }, [currentDate])
 
   // 이전 달로 이동
   const handlePrevMonth = () => {
@@ -54,7 +59,7 @@ const Home = () => {
         </div>
 
         <div className="flex flex-col gap-16">
-          <Calendar currentDate={currentDate} />
+          <Calendar currentDate={currentDate as dayjs.Dayjs} />
           <div className="w-full px-6">
             {diaries.length > 0 ? (
               <Diaries diaries={diaries} />
