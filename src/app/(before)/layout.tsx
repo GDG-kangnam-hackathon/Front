@@ -13,7 +13,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en">
-      <body className={`antialiased `}>
+      <body>
         <div
           className="max-w-[600px] m-auto min-h-[100dvh]"
           style={{

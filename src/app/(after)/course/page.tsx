@@ -10,7 +10,7 @@ import { Loading } from '@/components/Loading/Loading'
 import { CourseHeader } from '@/components/Header/header'
 
 const CoursePage = () => {
-  const [during, setDuring] = useState(31)
+  const [during, setDuring] = useState(365)
   const [data, setData] = useState<RecommendationSector[]>([])
 
   useEffect(() => {
@@ -39,14 +39,14 @@ const CoursePage = () => {
   return (
     <div className="flex flex-col items-center w-full">
       <CourseHeader during={during} setDuring={setDuring} />
-      <div className="flex flex-col items-center bg-white justify-center w-[560px] h-[117px] rounded-[20px] border-[3px] border-solid border-[#D9D9D9]">
+      <div className="flex flex-col items-center bg-white justify-center w-[560px] h-[130px] rounded-[20px] border-[3px] border-solid border-[#D9D9D9]">
         <p className="font-kopub font-[500] text-2xl h-[40px]">
           <span className="text-[#FF8984]">
             {during === 7 ? '이번 주' : during === 31 ? '이번 달' : '올 해'}
           </span>{' '}
           분석 결과
         </p>
-        <p className="font-kopub font-[500] text-2xl h-[40px]">
+        <p className="font-kopub font-[500] text-2xl h-[40px] w-[400px] text-center">
           <span className="text-[#FF8984]">{data && data[0].sectorName}</span>{' '}
           에 가장 높은 흥미를 가지고 있어!
         </p>
