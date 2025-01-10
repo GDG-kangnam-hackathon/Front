@@ -3,13 +3,15 @@ import React from 'react'
 type Emotion = 'Input' | 'Sad' | 'Happy' | 'Angry' | 'Normal' | 'Interest'
 
 interface EmotionImageProps {
-  emotion: Emotion
-  showText?: boolean // 텍스트 표시 여부를 결정하는 옵션
+  emotion: Emotion // 감정 선택된 값
+  showText?: boolean // 텍스트 표시 여부
+  onClick?: () => void // 클릭 이벤트 추가
 }
 
 const EmotionImage: React.FC<EmotionImageProps> = ({
   emotion,
   showText = true,
+  onClick,
 }) => {
   const emotionImages: Record<Emotion, string> = {
     Input: '/images/Input.svg',
@@ -30,7 +32,7 @@ const EmotionImage: React.FC<EmotionImageProps> = ({
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center" onClick={onClick}>
       <img
         src={emotionImages[emotion]}
         alt={emotion}
