@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import dayjs from 'dayjs'
 import useModal from '@/hooks/useModal'
 import WriteModal from '../ui/writemodal'
+import EmotionImage from '../ui/emotion'
 
 interface CalendarProps {
   currentDate: dayjs.Dayjs
@@ -15,17 +16,31 @@ const Calendar = ({ currentDate }: CalendarProps) => {
 
   const { isOpen, openModal, closeModal } = useModal()
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const [diaryData, setDiaryData] = useState<Record<string, string | null>>({})
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
+    const fetchDiaryData = async () => {
+      try {
+        const response = await fetch('/api/diary')
+        if (!response.ok) throw new Error('Failed to fetch data')
+        const result = await response.json()
+
+        const diaryMap = result.reduce(
+          (acc: Record<string, string>, diary: any) => {
+            acc[dayjs(diary.date).format('YYYY-MM-DD')] = diary.emotionType
+            return acc
+          },
+          {},
+        )
+
+        setDiaryData(diaryMap)
+      } catch (error) {
+        console.error(error)
+      }
     }
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isOpen])
+
+    fetchDiaryData()
+  }, [])
 
   const getDaysInMonth = (year: number, month: number) => {
     const firstDayOfMonth = new Date(year, month, 1).getDay()
@@ -86,40 +101,47 @@ const Calendar = ({ currentDate }: CalendarProps) => {
             key={weekIndex}
             className="relative flex items-center justify-between bg-white border-t border-b"
           >
-            {week.map((date, dayIndex) => (
-              <div
-                key={dayIndex}
-                className={`flex w-full h-[55px] items-center justify-center font-inter text-[14px] text-center cursor-pointer ${
-                  date.isCurrentMonth
-                    ? 'border-t-[2.5px] border-b-[2.5px] border-[#D9D9D9] text-[#7F7F7F]'
-                    : 'text-[#bcbcbc]'
-                } ${
-                  date.isCurrentMonth && date.day === 1
-                    ? 'border-l-[2.5px] rounded-l-full'
-                    : ''
-                } ${
-                  date.isCurrentMonth &&
-                  weekIndex === calendar.length - 1 &&
-                  dayIndex === week.filter((d) => d.isCurrentMonth).length - 1
-                    ? 'border-r-[2.5px] rounded-r-full'
-                    : ''
-                } ${
-                  date.isCurrentMonth &&
-                  date.day === todayDate &&
-                  currentDate.month() === dayjs().month() &&
-                  currentDate.year() === dayjs().year()
-                    ? 'text-[#FFA09C] font-semibold text-[16px]'
-                    : ''
-                }`}
-                onClick={() => handleDateClick(date.day, date.isCurrentMonth)}
-              >
-                <div className="flex gap-2 items-center">
-                  <span className="bg-[#F0F0F0] w-5 h-[2px] rounded"></span>
-                  {date.day}
-                  <span className="bg-[#F0F0F0] w-5 h-[2px] rounded"></span>
+            {week.map((date, dayIndex) => {
+              const formattedDate = dayjs(
+                new Date(year, month, date.day),
+              ).format('YYYY-MM-DD')
+              const emotion = diaryData[formattedDate] || null
+
+              return (
+                <div
+                  key={dayIndex}
+                  className={`flex w-full h-[55px] items-center justify-center font-inter text-[14px] text-center cursor-pointer ${
+                    date.isCurrentMonth
+                      ? 'border-t-[2.5px] border-b-[2.5px] border-[#D9D9D9] text-[#7F7F7F]'
+                      : 'text-[#bcbcbc]'
+                  } ${
+                    date.isCurrentMonth &&
+                    date.day === todayDate &&
+                    currentDate.month() === dayjs().month() &&
+                    currentDate.year() === dayjs().year()
+                      ? 'text-[#FFA09C] font-semibold text-[16px]'
+                      : ''
+                  }`}
+                  onClick={() => handleDateClick(date.day, date.isCurrentMonth)}
+                >
+                  <div className="flex gap-2 items-center">
+                    {date.isCurrentMonth && emotion ? (
+                      <EmotionImage
+                        emotion={emotion as any}
+                        showText={false}
+                        isSelected={true} // 항상 불투명하게
+                      />
+                    ) : (
+                      <>
+                        <span className="bg-[#F0F0F0] w-5 h-[2px] rounded"></span>
+                        {date.day}
+                        <span className="bg-[#F0F0F0] w-5 h-[2px] rounded"></span>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         ))}
       </div>
