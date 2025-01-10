@@ -37,6 +37,9 @@ export async function GET(req: Request) {
         lte: endOfDay,
       },
     },
+    orderBy: {
+      date: 'asc',
+    },
   })
   return NextResponse.json(diaries)
 }

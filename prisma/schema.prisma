@@ -34,6 +34,9 @@ model Diary {
   emotionScore Int      // 감정 점수 (1~10 등)
   reason       String?  // 감정의 이유 (Optional)
   date    DateTime
+
+  recommendationId String?
+  recommend Recommendation? @relation(fields: [recommendationId], references: [id], onDelete: SetNull)
 }
 
 model Recommendation {
@@ -41,6 +44,9 @@ model Recommendation {
   userId           String 
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   recommendedSectors RecommendationSector[] // 직업 계통과의 관계 (1:N)
+
+  diaries          Diary[]
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }

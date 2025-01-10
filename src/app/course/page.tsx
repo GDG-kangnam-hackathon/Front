@@ -21,6 +21,7 @@ const CoursePage = () => {
           headers: {
             'Content-Type': 'application/json',
           },
+          body: JSON.stringify({ during }),
         },
       )
       const res = await response.json()
@@ -68,36 +69,77 @@ const CoursePage = () => {
       />
 
       <div className="flex flex-col w-full px-4 mt-4">
-        {data.map((sector, index) => (
-          <Link
-            href={`/course/${sector.id}`}
-            key={sector.id}
-            className="flex flex-col items-center w-full py-4"
-          >
-            {/* 순위 표시 */}
-            {index < 3 ? (
-              <Image
-                src={`/images/king${index + 1}.svg`}
-                alt="순위 이미지"
-                width={100}
-                height={100}
-              />
-            ) : (
-              <div className="flex items-center justify-center w-16 h-16 bg-gray-300 rounded-full">
-                <span className="font-bold text-gray-800 text-2xl">
-                  {index + 1}
-                </span>
-              </div>
-            )}
-            {/* 계통과 백분율 */}
-            <div className="text-center text-[40px] font-nanum mt-[10px]">
-              <p className="text-gray-800">
-                <span className="text-[#FF8984]">{sector.sectorName}</span> 분야
-                / {sector.fitPercentage} %
-              </p>
+        {(() => {
+          const groupSectors = (data: any[]) => {
+            const grouped = []
+            if (data.length === 3) {
+              grouped.push([data[0]])
+              grouped.push([data[1], data[2]])
+            } else if (data.length === 4) {
+              grouped.push([data[0], data[1]])
+              grouped.push([data[2], data[3]])
+            } else if (data.length === 5) {
+              grouped.push([data[0]])
+              grouped.push([data[1], data[2]])
+              grouped.push([data[3], data[4]])
+            } else if (data.length === 6) {
+              grouped.push([data[0], data[1]])
+              grouped.push([data[2], data[3]])
+              grouped.push([data[4], data[5]])
+            } else {
+              for (let i = 0; i < data.length; i += 2) {
+                grouped.push(data.slice(i, i + 2))
+              }
+            }
+            return grouped
+          }
+
+          const groupedData = groupSectors(data)
+
+          return groupedData.map((group, groupIndex) => (
+            <div key={groupIndex} className="flex justify-center w-full">
+              {group.map((sector) => {
+                // data 배열의 원래 인덱스를 사용하여 순위 계산
+                const globalIndex = data.findIndex(
+                  (item) => item.id === sector.id,
+                )
+
+                return (
+                  <Link
+                    href={`/course/${sector.id}`}
+                    key={sector.id}
+                    className="flex flex-col items-center w-full py-4"
+                  >
+                    {/* 순위 표시 */}
+                    {globalIndex < 3 ? ( // 순위가 1~3등일 때 이미지 표시
+                      <Image
+                        src={`/images/king${globalIndex + 1}.svg`}
+                        alt="순위 이미지"
+                        width={100}
+                        height={100}
+                      />
+                    ) : (
+                      <div className="flex items-center mt-5 justify-center w-[102px] h-14 bg-[#9E9E9E] rounded-full">
+                        <span className="font-medium font-nanum text-white text-5xl">
+                          {globalIndex + 1}위 {/* 순위 표시 */}
+                        </span>
+                      </div>
+                    )}
+                    {/* 계통과 백분율 */}
+                    <div className="text-center text-[40px] font-nanum mt-[10px]">
+                      <p className="text-gray-800">
+                        <span className="text-[#FF8984]">
+                          {sector.sectorName}
+                        </span>{' '}
+                        분야 / {sector.fitPercentage} %
+                      </p>
+                    </div>
+                  </Link>
+                )
+              })}
             </div>
-          </Link>
-        ))}
+          ))
+        })()}
       </div>
     </div>
   )

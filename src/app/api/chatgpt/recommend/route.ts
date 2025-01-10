@@ -7,16 +7,26 @@ const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY!,
 })
 
-export const POST = async () => {
+export const POST = async (req: Request) => {
+  const { during } = await req.json()
+
   const user = await prisma.user.findUnique({
     where: {
       id: process.env.USER_ID,
     },
   })
 
+  const today = new Date()
+  const startDate = new Date()
+  startDate.setDate(today.getDate() - during)
+
   const diaries = await prisma.diary.findMany({
     where: {
       userId: process.env.NEXT_PUBLIC_USER_ID,
+      date: {
+        gte: startDate,
+        lte: today,
+      },
     },
     orderBy: {
       date: 'asc',
@@ -25,6 +35,30 @@ export const POST = async () => {
 
   if (!diaries || diaries.length === 0) {
     return NextResponse.json({ error: '다이어리가 없습니다.' }, { status: 404 })
+  }
+
+  const diaryIds = diaries.map((diary) => diary.id)
+
+  const existRecommendation = await prisma.recommendation.findFirst({
+    where: {
+      diaries: {
+        every: {
+          id: { in: diaryIds },
+        },
+      },
+    },
+    include: {
+      diaries: true,
+      recommendedSectors: {
+        include: {
+          recommendedJobs: true,
+        },
+      },
+    },
+  })
+
+  if (existRecommendation) {
+    return NextResponse.json(existRecommendation, { status: 200 })
   }
 
   // Diary 데이터를 문자열로 변환
@@ -45,7 +79,7 @@ export const POST = async () => {
       {
         role: 'system',
         content: `
-Analyze the user's diary data and recommend suitable job sectors and specific jobs. The analysis result must be returned in JSON format.
+Analyze the user's diary data and recommend suitable job sectors and specific jobs. Return the analysis result in JSON format and write all responses in **Korean**.
 
 1. **Target of Analysis**:
   - Main job sectors: Science and Engineering, Humanities and Social Sciences, Arts and Sports, Business, Education, Medical fields.
@@ -110,6 +144,7 @@ Analyze the user's diary data and recommend suitable job sectors and specific jo
 6. **Tone Guidelines**:
   - When writing the reasoning and job recommendations, avoid overly formal or academic expressions. Instead, use a friendly and easily understandable tone.
   - Example: "You seem to concentrate well when solving problems lately, so I think Science and Engineering suits you." or "You’ve mentioned drawing often in your diary, which suggests a great match with the Arts and Sports sector." Use a conversational tone, as if you're talking to a friend.
+  - **Write all reasoning, job recommendations, and descriptions in Korean.**
 `,
       },
       {
@@ -128,7 +163,7 @@ Analyze the user's diary data and recommend suitable job sectors and specific jo
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(gptResponse),
+    body: JSON.stringify({ gptResponse, diaries }),
   })
 
   const res = await fetch(
