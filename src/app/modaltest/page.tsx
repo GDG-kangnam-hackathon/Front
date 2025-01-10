@@ -5,9 +5,11 @@ import useModal from '@/hooks/useModal'
 import { Textarea } from '@/components/ui/textarea'
 import EmotionImage from '@/components/ui/emotion'
 import { Button } from '@/components/ui/button'
+import useForm from '@/hooks/useForm'
 
 const ModalTest = () => {
   const { isOpen, openModal, closeModal } = useModal()
+  const { formData, handleChange, handleSubmit } = useForm()
   const [animating, setAnimating] = useState(false)
 
   const handleCloseModal = () => {
@@ -18,8 +20,8 @@ const ModalTest = () => {
     }, 500)
   }
 
-  const handleSubmit = () => {
-    console.log('제출 완료')
+  const handleFormSubmit = () => {
+    handleSubmit()
     handleCloseModal()
   }
 
@@ -57,6 +59,8 @@ const ModalTest = () => {
                 <Textarea
                   className="w-[10.188rem] h-[2rem]"
                   placeholder="내용을 입력하세요."
+                  value={formData.dayFeeling}
+                  onChange={(e) => handleChange('dayFeeling', e.target.value)}
                 ></Textarea>
               </div>
               <p className="text-black text-center font-[KoPubWorldBatang] text-[28px] font-medium leading-normal mb-[1.781rem]">
@@ -78,6 +82,7 @@ const ModalTest = () => {
                       key={emotion}
                       emotion={emotion}
                       showText={true}
+                      onClick={() => handleChange('selectedEmotion', emotion)}
                     />
                   ))}
                 </div>
@@ -86,6 +91,7 @@ const ModalTest = () => {
                 <Textarea
                   className="w-[10.188rem] h-[2rem]"
                   placeholder="내용을 입력하세요."
+                  onChange={(e) => handleChange('emotionInput', e.target.value)}
                 ></Textarea>
               </div>
               <p className="text-black text-center font-[KoPubWorldBatang] text-[28px] font-medium leading-normal mb-[1.25rem]">
@@ -95,13 +101,14 @@ const ModalTest = () => {
                 <Textarea
                   className="w-[10.188rem] h-[2rem]"
                   placeholder="내용을 입력하세요."
+                  onChange={(e) => handleChange('reason', e.target.value)}
                 ></Textarea>
               </div>
               <div className="flex justify-center">
                 <Button
                   variant="default"
                   className="bg-custom-pink"
-                  onClick={handleSubmit}
+                  onClick={handleFormSubmit}
                 >
                   기록하기
                 </Button>
