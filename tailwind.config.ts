@@ -1,4 +1,3 @@
-import { nextui } from '@nextui-org/theme'
 import { Config } from 'tailwindcss'
 
 export default {
@@ -7,7 +6,6 @@ export default {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@nextui-org/theme/dist/components/(slider|popover).js',
   ],
   theme: {
     extend: {
@@ -86,5 +84,5 @@ export default {
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  plugins: [require('tailwindcss-animate'), nextui()],
+  plugins: [require('tailwindcss-animate')],
 } satisfies Config
