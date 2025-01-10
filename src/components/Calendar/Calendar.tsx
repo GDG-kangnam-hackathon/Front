@@ -121,6 +121,21 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate }) => {
     }
   }
 
+  useEffect(() => {
+    const body = document.body
+    const shouldDisableScroll = isWriteModalOpen || isReadModalOpen
+
+    if (shouldDisableScroll) {
+      body.style.overflow = 'hidden'
+    } else {
+      body.style.overflow = ''
+    }
+
+    return () => {
+      body.style.overflow = ''
+    }
+  }, [isWriteModalOpen, isReadModalOpen])
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex w-full justify-between px-3">
@@ -201,6 +216,10 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate }) => {
           isOpen={isReadModalOpen}
           onClose={closeReadModal}
           diary={diaryData[selectedDate || '']?.diary || null}
+          onEdit={() => {
+            closeReadModal()
+            openWriteModal()
+          }}
         />
       )}
     </div>
