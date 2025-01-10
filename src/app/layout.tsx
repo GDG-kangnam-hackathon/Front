@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import NavigationBar from '@/components/NavigationBar/NavigationBar'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -14,22 +13,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en">
-      <body className={`antialiased`}>
-        <div
-          className="max-w-[600px] m-auto min-h-[100dvh] mb-5"
-          style={{
-            backgroundImage: 'url(/images/paper-texture.svg)',
-            filter: 'brightness(1.05)',
-          }}
-        >
-          {children}
-        </div>
-        <div className="fixed bottom-0 w-full z-30">
-          <div className="max-w-[600px] m-auto">
-            <NavigationBar />
-          </div>
-        </div>
-      </body>
+      <body className={`antialiased`}>{children}</body>
     </html>
   )
 }

@@ -1,12 +1,13 @@
 'use client'
 
-import { CourseHeader } from '@/components/Header/header'
 import { useEffect, useState } from 'react'
 import CourseChart from '@/components/Chart/CourseChart'
 import { ChevronRight } from 'lucide-react'
 import { RecommendationSector } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
+import { CourseHeader } from '@/components/Header/header'
+import { Loading } from '@/components/Loading/Loading'
 
 const CoursePage = () => {
   const [during, setDuring] = useState(31)
@@ -31,7 +32,7 @@ const CoursePage = () => {
   }, [during])
 
   if (data.length === 0) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
   return (
