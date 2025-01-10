@@ -1,6 +1,6 @@
 import React from 'react'
 
-type Emotion = 'Joy' | 'Sad' | 'Happy' | 'Angry' | 'Normal' | 'Interest'
+type Emotion = '기쁨' | '슬픔' | '행복' | '화남' | '보통' | '흥미'
 
 interface EmotionImageProps {
   emotion: Emotion
@@ -16,21 +16,21 @@ const EmotionImage: React.FC<EmotionImageProps> = ({
   isSelected = false,
 }) => {
   const emotionImages: Record<Emotion, string> = {
-    Joy: '/images/joy.svg',
-    Sad: '/images/sad.svg',
-    Happy: '/images/happy.svg',
-    Angry: '/images/angry.svg',
-    Normal: '/images/normal.svg',
-    Interest: '/images/interest.svg',
+    기쁨: '/images/joy.svg',
+    슬픔: '/images/sad.svg',
+    행복: '/images/happy.svg',
+    화남: '/images/angry.svg',
+    보통: '/images/normal.svg',
+    흥미: '/images/interest.svg',
   }
 
   const emotionTexts: Record<Emotion, string> = {
-    Joy: '기쁨',
-    Sad: '슬픔',
-    Happy: '행복',
-    Angry: '화남',
-    Normal: '보통',
-    Interest: '흥미',
+    기쁨: '기쁨',
+    슬픔: '슬픔',
+    행복: '행복',
+    화남: '화남',
+    보통: '보통',
+    흥미: '흥미',
   }
 
   const handleClick = () => {
