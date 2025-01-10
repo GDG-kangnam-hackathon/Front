@@ -17,7 +17,7 @@ const WriteModal = ({ initialDate, onClose }: WriteModalProps) => {
     date: initialDate ? new Date(initialDate) : null,
   })
   const [animating, setAnimating] = useState(false)
-  const [selectedEmotion, setSelectedEmotion] = useState<string>('Joy')
+  const [selectedEmotion, setSelectedEmotion] = useState<string>('기쁨')
 
   const handleCloseModal = () => {
     setAnimating(true)
