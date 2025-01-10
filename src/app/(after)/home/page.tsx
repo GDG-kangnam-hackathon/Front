@@ -58,9 +58,8 @@ const Home = () => {
           </button>
         </div>
 
-        <div className="flex flex-col gap-16 w-full h-screen">
+        <div className="flex flex-col w-full min-h-screen gap-16">
           <Calendar currentDate={currentDate as dayjs.Dayjs} />
-
           <div className="w-full px-6">
             {diaries.length > 0 ? (
               <Diaries diaries={diaries} />
