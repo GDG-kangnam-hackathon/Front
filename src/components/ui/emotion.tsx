@@ -40,11 +40,16 @@ const EmotionImage: React.FC<EmotionImageProps> = ({
   }
 
   return (
-    <div className="flex flex-col items-center" onClick={handleClick}>
+    <div
+      className={`flex flex-col items-center ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={onClick ? handleClick : undefined}
+    >
       <img
         src={emotionImages[emotion]}
         alt={emotion}
-        className={`w-[5rem] h-[5rem] object-contain ${isSelected ? 'opacity-100' : 'opacity-50'}`}
+        className={`w-[5rem] h-[5rem] object-contain ${
+          isSelected ? 'opacity-100' : 'opacity-50'
+        }`}
       />
       {showText && (
         <p className="font-kopub mt-2 text-lg font-semibold">
