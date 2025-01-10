@@ -1,26 +1,33 @@
 import { useState } from 'react'
 
 type FormData = {
+  date: Date | null
   dayFeeling: string
   selectedEmotion: string
-  emotionInput: string
+  emotionScore: number
   reason: string
 }
 
-const useForm = () => {
-  const [formData, setFormdata] = useState<FormData>({
+const useForm = (initialValues?: Partial<FormData>) => {
+  const [formData, setFormData] = useState<FormData>({
+    date: null,
     dayFeeling: '',
     selectedEmotion: '',
-    emotionInput: '',
+    emotionScore: 0,
     reason: '',
+    ...initialValues, // 초기값을 병합
   })
 
-  const handleChange = (field: keyof FormData, value: string) => {
-    setFormdata((prev) => ({
+  const handleChange = (
+    field: keyof FormData,
+    value: string | number | Date | null,
+  ) => {
+    setFormData((prev) => ({
       ...prev,
       [field]: value,
     }))
   }
+
   const handleSubmit = () => {
     console.log(JSON.stringify(formData, null, 2))
   }
