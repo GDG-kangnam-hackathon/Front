@@ -12,7 +12,7 @@ const NavigationBar = () => {
     <div className="flex w-full items-center justify-around bg-white font-nanum text-[22px] py-1 border-t border-b border-t-1 border-b-1 border-[#D9D9D9] px-6">
       <div
         className="flex flex-col gap-1 items-center cursor-pointer"
-        onClick={() => router.push('/analyze')}
+        onClick={() => router.push('/analysis')}
       >
         <Icon
           icon="fluent-mdl2:sentiment-analysis"
