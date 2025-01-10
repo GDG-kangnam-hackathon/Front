@@ -47,7 +47,9 @@ const EmotionImage: React.FC<EmotionImageProps> = ({
         className={`w-[5rem] h-[5rem] object-contain ${isSelected ? 'opacity-100' : 'opacity-50'}`}
       />
       {showText && (
-        <p className="mt-2 text-lg font-semibold">{emotionTexts[emotion]}</p>
+        <p className="font-kopub mt-2 text-lg font-semibold">
+          {emotionTexts[emotion]}
+        </p>
       )}
     </div>
   )

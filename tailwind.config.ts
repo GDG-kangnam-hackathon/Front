@@ -1,3 +1,4 @@
+import { nextui } from '@nextui-org/theme'
 import tailwindcssAnimate from 'tailwindcss-animate'
 import { Config } from 'tailwindcss'
 
@@ -7,6 +8,7 @@ export default {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@nextui-org/theme/dist/components/(slider|popover).js',
   ],
   theme: {
     extend: {
@@ -18,6 +20,7 @@ export default {
       },
       colors: {
         'custom-pink': '#F587A0',
+        'custom-green': '#08A075',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -84,5 +87,5 @@ export default {
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), nextui()],
 } satisfies Config
