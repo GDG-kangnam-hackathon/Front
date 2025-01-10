@@ -6,8 +6,8 @@ import { ChevronRight } from 'lucide-react'
 import { RecommendationSector } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { CourseHeader } from '@/components/Header/header'
 import { Loading } from '@/components/Loading/Loading'
+import { CourseHeader } from '@/components/Header/header'
 
 const CoursePage = () => {
   const [during, setDuring] = useState(31)

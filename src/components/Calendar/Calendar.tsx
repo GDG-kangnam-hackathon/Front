@@ -32,7 +32,7 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate }) => {
   const [diaryData, setDiaryData] = useState<
     Record<string, { emotionType: string; diary: any }>
   >({})
-            
+
   useEffect(() => {
     const fetchDiaryData = async () => {
       try {
@@ -56,13 +56,9 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate }) => {
         setDiaryData(diaryMap)
       } catch (error) {
         console.error(error)
+      }
     }
-  }
-
-  useEffect(() => {
-    fetchDiaryData()
   }, [currentDate])
-
   const handleDiaryUpdate = (newDiary: {
     date: string
     emotionType: string
