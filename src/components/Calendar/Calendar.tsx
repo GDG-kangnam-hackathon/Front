@@ -172,6 +172,13 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate }) => {
                     currentDate.year() === dayjs().year()
                       ? 'text-[#FFA09C] font-semibold text-[16px]'
                       : ''
+                  } ${
+                    date.isCurrentMonth && date.day === 1 // first day of the month
+                      ? 'rounded-l-full border-l-[3px]'
+                      : date.isCurrentMonth &&
+                          date.day === currentDate.daysInMonth() // last day of the month
+                        ? 'rounded-r-full border-r-[3px]'
+                        : ''
                   }`}
                   onClick={() => handleDateClick(date.day, date.isCurrentMonth)}
                 >
@@ -184,9 +191,9 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate }) => {
                       />
                     ) : (
                       <>
-                        <span className="bg-[#F0F0F0] w-5 h-[2px] rounded"></span>
+                        <span className="bg-[#e9e9e9] w-5 h-[3px] rounded"></span>
                         {date.day}
-                        <span className="bg-[#F0F0F0] w-5 h-[2px] rounded"></span>
+                        <span className="bg-[#e9e9e9] w-5 h-[3px] rounded"></span>
                       </>
                     )}
                   </div>

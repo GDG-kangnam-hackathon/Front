@@ -58,13 +58,14 @@ const Home = () => {
           </button>
         </div>
 
-        <div className="flex flex-col gap-16">
+        <div className="flex flex-col gap-16 w-full h-screen">
           <Calendar currentDate={currentDate as dayjs.Dayjs} />
+
           <div className="w-full px-6">
             {diaries.length > 0 ? (
               <Diaries diaries={diaries} />
             ) : (
-              <p className="text-[#7F7F7F] font-nanum text-[20px]">
+              <p className="text-[#7F7F7F] font-nanum text-[40px]">
                 거북이가 당신의 일기를 기다리고 있어요..
               </p>
             )}
