@@ -51,6 +51,7 @@ const WriteModal: React.FC<WriteModalProps> = ({
       }
 
       const newDiary = await response.json()
+      console.log(response)
       onDiaryUpdate({ date: newDiary.date, emotionType: newDiary.emotionType })
       handleCloseModal()
     } catch (error) {

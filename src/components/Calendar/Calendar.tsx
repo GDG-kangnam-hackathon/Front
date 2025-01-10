@@ -38,16 +38,19 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate }) => {
       try {
         const response = await fetch(
           `/api/diary?day=${encodeURIComponent(currentDate.format('YYYY-MM'))}`,
-          {
-            method: 'GET',
-          },
         )
         if (!response.ok) throw new Error('Failed to fetch data')
         const result = await response.json()
 
         const diaryMap = result.reduce(
-          (acc: Record<string, string>, diary: any) => {
-            acc[dayjs(diary.date).format('YYYY-MM-DD')] = diary.emotionType
+          (
+            acc: Record<string, { emotionType: string; diary: any }>,
+            diary: any,
+          ) => {
+            acc[dayjs(diary.date).format('YYYY-MM-DD')] = {
+              emotionType: diary.emotionType,
+              diary: diary,
+            }
             return acc
           },
           {},
@@ -58,7 +61,10 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate }) => {
         console.error(error)
       }
     }
+
+    fetchDiaryData()
   }, [currentDate])
+
   const handleDiaryUpdate = (newDiary: {
     date: string
     emotionType: string
