@@ -1,6 +1,6 @@
 import React from 'react'
 
-type Emotion = '기쁨' | '슬픔' | '행복' | '화남' | '보통' | '흥미'
+export type Emotion = '기쁨' | '슬픔' | '행복' | '화남' | '보통' | '흥미'
 
 interface EmotionImageProps {
   emotion: Emotion
