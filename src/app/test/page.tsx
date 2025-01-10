@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import { Diary } from '../api/diary/model'
+import Image from 'next/image'
 
 const Home = () => {
   const [diaries, setDiaries] = useState<Diary[]>([])
-  const [gptResponse, setGptResponse] = useState<string>('')
+  const [gptResponse, setGptResponse] = useState<any>(null)
 
   // 다이어리 조회
   const fetchDiaries = async () => {
@@ -21,7 +22,7 @@ const Home = () => {
   // GPT 호출
   const fetchGPTRecommendation = async () => {
     try {
-      const response = await fetch('/api/chatgpt', {
+      const response = await fetch('/api/chatgpt/recommend', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -31,15 +32,15 @@ const Home = () => {
       if (response.ok) {
         const data = await response.json()
         console.log(data)
-        setGptResponse(data)
+        setGptResponse(data) // JSON 객체로 저장
       } else {
         const errorData = await response.json()
         console.error('Error fetching GPT recommendation:', errorData)
-        setGptResponse('Error fetching GPT recommendation.')
+        setGptResponse(null)
       }
     } catch (error) {
       console.error('Error fetching GPT recommendation:', error)
-      setGptResponse('Error fetching GPT recommendation.')
+      setGptResponse(null)
     }
   }
 
@@ -61,10 +62,47 @@ const Home = () => {
           <p>No diaries found.</p>
         )}
       </ul>
+
       <div style={{ marginTop: '20px' }}>
         <h2>GPT Recommendation</h2>
         {gptResponse ? (
-          <p>{gptResponse}</p>
+          <div>
+            {gptResponse.recommendedSectors.map(
+              (sector: any, index: number) => (
+                <div key={index} style={{ marginBottom: '20px' }}>
+                  <h3>
+                    {sector.sectorName} (Fit: {sector.fitPercentage}%)
+                  </h3>
+                  <ul>
+                    {sector.recommendedJobs.map(
+                      (job: any, jobIndex: number) => (
+                        <li
+                          key={jobIndex}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginBottom: '10px',
+                          }}
+                        >
+                          <Image
+                            src={job.jobImage || '/placeholder.jpg'} // 이미지가 없으면 기본 이미지를 표시
+                            alt={job.jobName}
+                            width={50}
+                            height={50}
+                            style={{ marginRight: '10px', borderRadius: '4px' }}
+                          />
+                          <div>
+                            <strong>{job.jobName}</strong>
+                            {job.jobDescription && <p>{job.jobDescription}</p>}
+                          </div>
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </div>
+              ),
+            )}
+          </div>
         ) : (
           <p>Click the button to get a recommendation.</p>
         )}

@@ -12,3 +12,15 @@ export async function GET() {
   }
   return NextResponse.json(user)
 }
+export async function PUT(req: Request) {
+  const { jobField } = await req.json()
+
+  await prisma.user.update({
+    where: {
+      id: process.env.NEXT_PUBLIC_USER_ID as string,
+    },
+    data: {
+      jobField,
+    },
+  })
+}

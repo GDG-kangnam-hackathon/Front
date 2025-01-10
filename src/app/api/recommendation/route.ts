@@ -28,11 +28,32 @@ export async function POST(req: Request) {
       },
     })
     for (const job of sector.jobs) {
+      let jobImage = null
+      try {
+        const imageResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/search-image`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ keyword: job.name }),
+          },
+        )
+        const imageData = await imageResponse.json()
+        if (imageResponse.ok && imageData.url) {
+          jobImage = imageData.url // API에서 반환된 이미지 URL
+        }
+      } catch (error) {
+        console.error(`Failed to fetch image for job: ${job.name}`, error)
+      }
+      console.log(jobImage)
       await prisma.recommendationJob.create({
         data: {
           sectorId: createdSector.id,
           jobName: job.name,
           jobDescription: job.description || null,
+          jobImage: jobImage,
         },
       })
     }
@@ -57,7 +78,6 @@ export async function GET() {
       updatedAt: 'desc',
     },
   })
-
   return NextResponse.json(recommendations)
 }
 
