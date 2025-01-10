@@ -1,12 +1,43 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useModal from '@/hooks/useModal'
 import { Button } from '@/components/ui/button'
+import { Diary } from '../api/diary/model'
 
-const ModalTest = () => {
+const ReadModal = () => {
   const { isOpen, openModal, closeModal } = useModal()
   const [animating, setAnimating] = useState(false)
+  const [data, setData] = useState<Diary | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString)
+    const dayNames = ['일', '월', '화', '수', '목', '금', '토']
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const dayName = dayNames[date.getDay()]
+    return `${year}. ${month}. ${day} (${dayName})`
+  }
+
+  // API로 데이터 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/diary')
+        if (!response.ok) throw new Error('Failed to fetch data')
+        const result = await response.json()
+        setData(result[0])
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   const handleOpenModal = () => {
     openModal()
@@ -19,6 +50,8 @@ const ModalTest = () => {
       setAnimating(false)
     }, 500)
   }
+
+  if (loading) return <p>Loading...</p>
 
   return (
     <div>
@@ -42,8 +75,9 @@ const ModalTest = () => {
                   onClick={handleCloseModal}
                 ></hr>
               </div>
+              {/* 날짜 출력 */}
               <p className="text-[#6F6F6F] text-center font-kopub text-[28px] font-medium leading-normal mb-[2.688rem]">
-                2025. 01.08 (수)
+                {data?.date ? formatDate(data.date) : '날짜 없음'}
               </p>
               <div className="flex justify-center items-center flex-col">
                 <img
@@ -57,17 +91,14 @@ const ModalTest = () => {
                     className="w-[113px] h-[96px]"
                   />
                   <span className=" absolute top-5 left-9 text-center font-nanum text-[30px] not-italic font-normal leading-normal">
-                    10점
+                    {data?.emotionScore
+                      ? `${data.emotionScore}점`
+                      : '점수 없음'}
                   </span>
                 </div>
+                {/* 내용 출력 */}
                 <p className="text-[#050505] text-center font-nanum text-[30px] not-italic font-normal leading-normal px-[68px] mb-[40px]">
-                  어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구
-                  어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구
-                  어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구
-                  어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구
-                  어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구
-                  어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구 어쩌구저쩌구
-                  어쩌구저쩌구
+                  {data?.content || '내용 없음'}
                 </p>
               </div>
               <div className="flex justify-center gap-[29px]">
@@ -86,4 +117,4 @@ const ModalTest = () => {
   )
 }
 
-export default ModalTest
+export default ReadModal

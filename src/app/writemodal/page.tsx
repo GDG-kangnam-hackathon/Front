@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import useForm from '@/hooks/useForm'
 import Slider from '@/components/ui/slider'
 
-const ModalTest = () => {
+const WriteModal = () => {
   const { isOpen, openModal, closeModal } = useModal()
   const { handleChange, handleSubmit } = useForm()
   const [animating, setAnimating] = useState(false)
@@ -133,4 +133,4 @@ const ModalTest = () => {
   )
 }
 
-export default ModalTest
+export default WriteModal
