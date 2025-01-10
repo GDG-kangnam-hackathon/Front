@@ -1,44 +1,65 @@
+'use client'
+
 import React, { useState, useEffect } from 'react'
 import dayjs from 'dayjs'
 import useModal from '@/hooks/useModal'
 import WriteModal from '../ui/writemodal'
+import ReadModal from '../ui/readmodal'
 import EmotionImage from '../ui/emotion'
 
 interface CalendarProps {
   currentDate: dayjs.Dayjs
 }
 
-const Calendar = ({ currentDate }: CalendarProps) => {
+const Calendar: React.FC<CalendarProps> = ({ currentDate }) => {
   const yoil = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
   const year = currentDate.year()
   const month = currentDate.month()
   const todayDate = dayjs().date()
 
-  const { isOpen, openModal, closeModal } = useModal()
+  const {
+    isOpen: isWriteModalOpen,
+    openModal: openWriteModal,
+    closeModal: closeWriteModal,
+  } = useModal()
+  const {
+    isOpen: isReadModalOpen,
+    openModal: openReadModal,
+    closeModal: closeReadModal,
+  } = useModal()
+
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
-  const [diaryData, setDiaryData] = useState<Record<string, string | null>>({})
+  const [diaryData, setDiaryData] = useState<
+    Record<string, { emotionType: string; diary: any }>
+  >({})
+
+  const fetchDiaryData = async () => {
+    try {
+      const response = await fetch('/api/diary')
+      if (!response.ok) throw new Error('Failed to fetch data')
+      const result = await response.json()
+
+      const diaryMap = result.reduce(
+        (
+          acc: Record<string, { emotionType: string; diary: any }>,
+          diary: any,
+        ) => {
+          acc[dayjs(diary.date).format('YYYY-MM-DD')] = {
+            emotionType: diary.emotionType,
+            diary,
+          }
+          return acc
+        },
+        {},
+      )
+
+      setDiaryData(diaryMap)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   useEffect(() => {
-    const fetchDiaryData = async () => {
-      try {
-        const response = await fetch('/api/diary')
-        if (!response.ok) throw new Error('Failed to fetch data')
-        const result = await response.json()
-
-        const diaryMap = result.reduce(
-          (acc: Record<string, string>, diary: any) => {
-            acc[dayjs(diary.date).format('YYYY-MM-DD')] = diary.emotionType
-            return acc
-          },
-          {},
-        )
-
-        setDiaryData(diaryMap)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
     fetchDiaryData()
   }, [])
 
@@ -48,21 +69,12 @@ const Calendar = ({ currentDate }: CalendarProps) => {
   }) => {
     setDiaryData((prev) => ({
       ...prev,
-      [dayjs(newDiary.date).format('YYYY-MM-DD')]: newDiary.emotionType,
+      [dayjs(newDiary.date).format('YYYY-MM-DD')]: {
+        emotionType: newDiary.emotionType,
+        diary: newDiary,
+      },
     }))
   }
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isOpen])
 
   const getDaysInMonth = (year: number, month: number) => {
     const firstDayOfMonth = new Date(year, month, 1).getDay()
@@ -98,9 +110,15 @@ const Calendar = ({ currentDate }: CalendarProps) => {
 
   const handleDateClick = (day: number, isCurrentMonth: boolean) => {
     if (!isCurrentMonth) return
+
     const clickedDate = dayjs(new Date(year, month, day)).format('YYYY-MM-DD')
     setSelectedDate(clickedDate)
-    openModal()
+
+    if (diaryData[clickedDate]) {
+      openReadModal()
+    } else {
+      openWriteModal()
+    }
   }
 
   return (
@@ -127,7 +145,7 @@ const Calendar = ({ currentDate }: CalendarProps) => {
               const formattedDate = dayjs(
                 new Date(year, month, date.day),
               ).format('YYYY-MM-DD')
-              const emotion = diaryData[formattedDate] || null
+              const emotion = diaryData[formattedDate]?.emotionType || null
 
               return (
                 <div
@@ -149,9 +167,9 @@ const Calendar = ({ currentDate }: CalendarProps) => {
                   <div className="flex gap-2 items-center">
                     {date.isCurrentMonth && emotion ? (
                       <EmotionImage
-                        emotion={emotion as any}
+                        emotion={emotion}
                         showText={false}
-                        isSelected={true} // 항상 불투명하게
+                        isSelected={true}
                       />
                     ) : (
                       <>
@@ -169,11 +187,20 @@ const Calendar = ({ currentDate }: CalendarProps) => {
       </div>
 
       {/* WriteModal */}
-      {isOpen && (
+      {isWriteModalOpen && (
         <WriteModal
           initialDate={selectedDate}
-          onClose={closeModal}
+          onClose={closeWriteModal}
           onDiaryUpdate={handleDiaryUpdate}
+        />
+      )}
+
+      {/* ReadModal */}
+      {isReadModalOpen && (
+        <ReadModal
+          isOpen={isReadModalOpen}
+          onClose={closeReadModal}
+          diary={diaryData[selectedDate || '']?.diary || null}
         />
       )}
     </div>
