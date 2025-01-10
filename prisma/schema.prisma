@@ -17,6 +17,7 @@ model User {
   id        String    @id @default(uuid())
   name      String
   email     String    @unique
+  jobField  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
@@ -62,6 +63,7 @@ model RecommendationJob {
   sector       RecommendationSector @relation(fields: [sectorId], references: [id], onDelete: Cascade)
   jobName      String   // 추천된 직업 이름 (예: 소프트웨어 엔지니어)
   jobDescription String? // 직업 설명 (Optional)
+  jobImage     String?  // 직업 예시 이미지
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
