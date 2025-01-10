@@ -2,6 +2,8 @@ import { Diary } from '@/app/api/diary/model'
 import Image from 'next/image'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
+import EmotionImage from '../ui/emotion'
+import { Emotion } from '../ui/emotion'
 
 const Diaries = ({ diaries }: { diaries: Diary[] }) => {
   const turtle = [
@@ -42,11 +44,11 @@ const Diaries = ({ diaries }: { diaries: Diary[] }) => {
 
               <div className="flex flex-col gap-3 px-12 py-3 w-full">
                 <div className="flex gap-4 items-center justify-center">
-                  <Image
-                    src="/images/normal.svg"
-                    alt="interest"
-                    width={65}
-                    height={56}
+                  {/* EmotionImage 컴포넌트 사용 */}
+                  <EmotionImage
+                    emotion={diary.emotionType as Emotion}
+                    showText={false}
+                    isSelected={true}
                   />
                   <p className="font-nanum text-[40px]">
                     {diary.emotionType} {diary.emotionScore} 점

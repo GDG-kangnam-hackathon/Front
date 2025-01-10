@@ -14,16 +14,15 @@ interface WriteModalProps {
   onDiaryUpdate: (newDiary: { date: string; emotionType: string }) => void
 }
 
-const WriteModal = ({
+const WriteModal: React.FC<WriteModalProps> = ({
   initialDate,
   onClose,
   onDiaryUpdate,
-}: WriteModalProps) => {
+}) => {
   const { formData, handleChange } = useForm({
     date: initialDate ? new Date(initialDate) : null,
   })
   const [animating, setAnimating] = useState(false)
-  const [selectedEmotion, setSelectedEmotion] = useState<string>('기쁨')
 
   const handleCloseModal = () => {
     setAnimating(true)
@@ -59,17 +58,12 @@ const WriteModal = ({
     }
   }
 
-  const handleEmotionSelect = (emotion: string) => {
-    setSelectedEmotion(emotion)
-    handleChange('selectedEmotion', emotion)
-  }
-
   return (
     <div>
       <div className="fixed h-[100dvh] inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-center">
         <div
           className={`bg-paper-texture bg-cover brightness-105 rounded-lg shadow-lg w-[37.5rem] h-[70.75rem] p-6 
-    ${animating ? 'animate-slide-down' : 'animate-slide-up'}`}
+          ${animating ? 'animate-slide-down' : 'animate-slide-up'}`}
         >
           <div className="absolute top-[-50px] left-4">
             <Icon
@@ -97,6 +91,7 @@ const WriteModal = ({
               className="border-0 w-[10.188rem] h-[2rem] text-gray-500 text-center font-nanum resize-none"
               placeholder="내용을 입력하세요."
               style={{ fontSize: '1.75rem' }}
+              value={formData.dayFeeling}
               onChange={(e) => handleChange('dayFeeling', e.target.value)}
             ></Textarea>
           </div>
@@ -111,8 +106,8 @@ const WriteModal = ({
                     key={emotion}
                     emotion={emotion}
                     showText={true}
-                    onClick={() => handleEmotionSelect(emotion)}
-                    isSelected={selectedEmotion === emotion}
+                    onClick={() => handleChange('selectedEmotion', emotion)}
+                    isSelected={formData.selectedEmotion === emotion}
                   />
                 ),
               )}
@@ -121,6 +116,7 @@ const WriteModal = ({
           <div className="flex justify-center mb-[8.5rem]">
             <Slider
               max={10}
+              value={formData.emotionScore}
               onChange={(value: number) => handleChange('emotionScore', value)}
             />
           </div>
@@ -131,6 +127,7 @@ const WriteModal = ({
             <Textarea
               className="border-0 w-[10.188rem] h-[2rem] text-gray-500 text-center font-nanum text-2xl not-italic font-normal leading-normal resize-none"
               placeholder="내용을 입력하세요."
+              value={formData.reason}
               onChange={(e) => handleChange('reason', e.target.value)}
               style={{ fontSize: '1.75rem' }}
             ></Textarea>
