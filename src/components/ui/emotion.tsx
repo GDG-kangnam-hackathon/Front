@@ -1,20 +1,22 @@
 import React from 'react'
 
-type Emotion = 'Input' | 'Sad' | 'Happy' | 'Angry' | 'Normal' | 'Interest'
+type Emotion = 'Joy' | 'Sad' | 'Happy' | 'Angry' | 'Normal' | 'Interest'
 
 interface EmotionImageProps {
-  emotion: Emotion // 감정 선택된 값
-  showText?: boolean // 텍스트 표시 여부
-  onClick?: () => void // 클릭 이벤트 추가
+  emotion: Emotion
+  showText?: boolean
+  onClick?: (emotion: Emotion) => void
+  isSelected?: boolean
 }
 
 const EmotionImage: React.FC<EmotionImageProps> = ({
   emotion,
   showText = true,
   onClick,
+  isSelected = false,
 }) => {
   const emotionImages: Record<Emotion, string> = {
-    Input: '/images/Input.svg',
+    Joy: '/images/joy.svg',
     Sad: '/images/sad.svg',
     Happy: '/images/happy.svg',
     Angry: '/images/angry.svg',
@@ -23,7 +25,7 @@ const EmotionImage: React.FC<EmotionImageProps> = ({
   }
 
   const emotionTexts: Record<Emotion, string> = {
-    Input: '직접 입력',
+    Joy: '기쁨',
     Sad: '슬픔',
     Happy: '행복',
     Angry: '화남',
@@ -31,12 +33,18 @@ const EmotionImage: React.FC<EmotionImageProps> = ({
     Interest: '흥미',
   }
 
+  const handleClick = () => {
+    if (onClick) {
+      onClick(emotion)
+    }
+  }
+
   return (
-    <div className="flex flex-col items-center" onClick={onClick}>
+    <div className="flex flex-col items-center" onClick={handleClick}>
       <img
         src={emotionImages[emotion]}
         alt={emotion}
-        className="w-[5rem] h-[5rem] object-contain"
+        className={`w-[5rem] h-[5rem] object-contain ${isSelected ? 'opacity-100' : 'opacity-50'}`}
       />
       {showText && (
         <p className="mt-2 text-lg font-semibold">{emotionTexts[emotion]}</p>

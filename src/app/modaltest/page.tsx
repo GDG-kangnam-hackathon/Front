@@ -9,8 +9,9 @@ import useForm from '@/hooks/useForm'
 
 const ModalTest = () => {
   const { isOpen, openModal, closeModal } = useModal()
-  const { formData, handleChange, handleSubmit } = useForm()
+  const { handleChange, handleSubmit } = useForm()
   const [animating, setAnimating] = useState(false)
+  const [selectedEmotion, setSelectedEmotion] = useState<string>('')
 
   const handleCloseModal = () => {
     setAnimating(true)
@@ -23,6 +24,11 @@ const ModalTest = () => {
   const handleFormSubmit = () => {
     handleSubmit()
     handleCloseModal()
+  }
+
+  const handleEmotionSelect = (emotion: string) => {
+    setSelectedEmotion(emotion)
+    handleChange('selectedEmotion', emotion)
   }
 
   return (
@@ -40,7 +46,7 @@ const ModalTest = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-center">
             {/* 모달 컨텐츠 */}
             <div
-              className={`bg-paper-texture bg-cover rounded-lg shadow-lg w-[37.5rem] h-[70.75rem] p-6 
+              className={`bg-paper-texture bg-cover brightness-105 rounded-lg shadow-lg w-[37.5rem] h-[70.75rem] p-6 
                 ${animating ? 'animate-fade-out-down' : 'animate-fade-in-up'}`}
             >
               <div className="flex justify-between items-center mb-[2.688rem]">
@@ -59,7 +65,6 @@ const ModalTest = () => {
                 <Textarea
                   className="w-[10.188rem] h-[2rem]"
                   placeholder="내용을 입력하세요."
-                  value={formData.dayFeeling}
                   onChange={(e) => handleChange('dayFeeling', e.target.value)}
                 ></Textarea>
               </div>
@@ -70,7 +75,7 @@ const ModalTest = () => {
                 <div className="flex gap-4 overflow-x-scroll w-full px-4">
                   {(
                     [
-                      'Input',
+                      'Joy',
                       'Sad',
                       'Happy',
                       'Angry',
@@ -82,7 +87,8 @@ const ModalTest = () => {
                       key={emotion}
                       emotion={emotion}
                       showText={true}
-                      onClick={() => handleChange('selectedEmotion', emotion)}
+                      onClick={() => handleEmotionSelect(emotion)} // Pass select handler
+                      isSelected={selectedEmotion === emotion}
                     />
                   ))}
                 </div>
