@@ -15,8 +15,8 @@ const ModalTest = () => {
   const [selectedEmotion, setSelectedEmotion] = useState<string>('')
 
   const handleOpenModal = () => {
-    setSelectedEmotion('Joy') // Default to "Joy"
-    handleChange('selectedEmotion', 'Joy') // Update useForm state
+    setSelectedEmotion('Joy')
+    handleChange('selectedEmotion', 'Joy')
     openModal()
   }
 
