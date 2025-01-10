@@ -17,7 +17,7 @@ const Slider: React.FC<SliderProps> = ({ max, onChange }) => {
   }
 
   return (
-    <div className="relative w-full items-center">
+    <div className="relative w-full">
       {/* 슬라이더 트랙 */}
       <div className="w-full h-1 bg-gray-300 rounded-full relative">
         <div
@@ -48,9 +48,9 @@ const Slider: React.FC<SliderProps> = ({ max, onChange }) => {
           <img
             src="./images/union.svg"
             alt="점수 말풍선"
-            className="h-11 w-11"
+            className="h-10 w-10"
           />
-          <span className="absolute inset-0 flex items-center justify-center text-xs text-gray-700 font-semibold">
+          <span className="mr-[2.5px] font-nanum absolute inset-0 flex items-center justify-center text-center text-[25px] font-normal leading-normal">
             {value}점
           </span>
         </div>

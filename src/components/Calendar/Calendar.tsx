@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import dayjs from 'dayjs'
 import useModal from '@/hooks/useModal'
 import WriteModal from '../ui/writemodal'
@@ -15,6 +15,17 @@ const Calendar = ({ currentDate }: CalendarProps) => {
 
   const { isOpen, openModal, closeModal } = useModal()
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
 
   const getDaysInMonth = (year: number, month: number) => {
     const firstDayOfMonth = new Date(year, month, 1).getDay()
