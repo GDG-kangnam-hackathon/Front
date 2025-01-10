@@ -42,6 +42,16 @@ const Calendar = ({ currentDate }: CalendarProps) => {
     fetchDiaryData()
   }, [])
 
+  const handleDiaryUpdate = (newDiary: {
+    date: string
+    emotionType: string
+  }) => {
+    setDiaryData((prev) => ({
+      ...prev,
+      [dayjs(newDiary.date).format('YYYY-MM-DD')]: newDiary.emotionType,
+    }))
+  }
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -159,7 +169,13 @@ const Calendar = ({ currentDate }: CalendarProps) => {
       </div>
 
       {/* WriteModal */}
-      {isOpen && <WriteModal initialDate={selectedDate} onClose={closeModal} />}
+      {isOpen && (
+        <WriteModal
+          initialDate={selectedDate}
+          onClose={closeModal}
+          onDiaryUpdate={handleDiaryUpdate}
+        />
+      )}
     </div>
   )
 }

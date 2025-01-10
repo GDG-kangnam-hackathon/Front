@@ -6,13 +6,19 @@ import EmotionImage from '@/components/ui/emotion'
 import { Button } from '@/components/ui/button'
 import useForm from '@/hooks/useForm'
 import Slider from '@/components/ui/slider'
+import { Icon } from '@iconify/react/dist/iconify.js'
 
 interface WriteModalProps {
   initialDate: string | null
   onClose: () => void
+  onDiaryUpdate: (newDiary: { date: string; emotionType: string }) => void
 }
 
-const WriteModal = ({ initialDate, onClose }: WriteModalProps) => {
+const WriteModal = ({
+  initialDate,
+  onClose,
+  onDiaryUpdate,
+}: WriteModalProps) => {
   const { formData, handleChange } = useForm({
     date: initialDate ? new Date(initialDate) : null,
   })
@@ -45,8 +51,8 @@ const WriteModal = ({ initialDate, onClose }: WriteModalProps) => {
         throw new Error('Failed to save diary')
       }
 
-      const data = await response.json()
-      console.log('Diary saved successfully:', data)
+      const newDiary = await response.json()
+      onDiaryUpdate({ date: newDiary.date, emotionType: newDiary.emotionType })
       handleCloseModal()
     } catch (error) {
       console.error('Error submitting form:', error)
@@ -60,11 +66,18 @@ const WriteModal = ({ initialDate, onClose }: WriteModalProps) => {
 
   return (
     <div>
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-center">
+      <div className="fixed h-[100dvh] inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-center">
         <div
           className={`bg-paper-texture bg-cover brightness-105 rounded-lg shadow-lg w-[37.5rem] h-[70.75rem] p-6 
     ${animating ? 'animate-slide-down' : 'animate-slide-up'}`}
         >
+          <div className="absolute top-[-50px] left-4">
+            <Icon
+              icon="mingcute:back-line"
+              className="w-[41px] h-[41px] hover:cursor-pointer"
+              onClick={handleCloseModal}
+            />
+          </div>
           <div className="flex justify-between items-center mb-[2.688rem]">
             <hr
               className="w-[8.5rem] h-[0.5rem] mx-auto bg-gray-300 border-0 rounded"
@@ -79,10 +92,11 @@ const WriteModal = ({ initialDate, onClose }: WriteModalProps) => {
           <p className="text-black text-center font-kopub text-[28px] font-medium leading-normal mb-[1.781rem]">
             오늘 하루는 어땠어?
           </p>
-          <div className="flex justify-center mb-[162.5px]">
+          <div className="flex justify-center mb-[100px]">
             <Textarea
-              className="border-0 w-[10.188rem] h-[2rem] text-gray-500 text-center font-nanum text-2xl not-italic font-normal leading-normal resize-none"
+              className="border-0 w-[10.188rem] h-[2rem] text-gray-500 text-center font-nanum resize-none"
               placeholder="내용을 입력하세요."
+              style={{ fontSize: '1.75rem' }}
               onChange={(e) => handleChange('dayFeeling', e.target.value)}
             ></Textarea>
           </div>
@@ -118,6 +132,7 @@ const WriteModal = ({ initialDate, onClose }: WriteModalProps) => {
               className="border-0 w-[10.188rem] h-[2rem] text-gray-500 text-center font-nanum text-2xl not-italic font-normal leading-normal resize-none"
               placeholder="내용을 입력하세요."
               onChange={(e) => handleChange('reason', e.target.value)}
+              style={{ fontSize: '1.75rem' }}
             ></Textarea>
           </div>
           <div className="flex justify-center">
