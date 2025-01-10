@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { NextResponse } from 'next/server'
+import sharp from 'sharp'
 
 export async function POST(req: Request) {
   try {
@@ -70,10 +71,24 @@ export async function POST(req: Request) {
     }
 
     const buffer = await imageResponse.arrayBuffer()
-    fs.mkdirSync(path.dirname(imagePath), { recursive: true }) // 필요한 경우 폴더 생성
-    fs.writeFileSync(imagePath, Buffer.from(buffer))
+    const tempImagePath = path.join(
+      process.cwd(),
+      'temp',
+      `${keyword}-temp.jpg`,
+    ) // 임시 파일 저장 경로
 
-    // Step 4: 저장된 이미지 URL 반환
+    fs.mkdirSync(path.dirname(tempImagePath), { recursive: true })
+    fs.writeFileSync(tempImagePath, Buffer.from(buffer))
+
+    // Step 4: 이미지 크기 조정
+    await sharp(tempImagePath)
+      .resize(200, 200) // 크기 조정
+      .toFile(imagePath)
+
+    // 임시 파일 삭제
+    fs.unlinkSync(tempImagePath)
+
+    // Step 5: 저장된 이미지 URL 반환
     return NextResponse.json({ url: publicUrl }, { status: 200 })
   } catch (error) {
     console.error('Error in manage-image API:', error)

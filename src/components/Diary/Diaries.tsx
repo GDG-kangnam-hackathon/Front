@@ -40,7 +40,7 @@ const Diaries = ({ diaries }: { diaries: Diary[] }) => {
                 }}
               ></span>
 
-              <div className="flex flex-col gap-3 px-12 py-3">
+              <div className="flex flex-col gap-3 px-12 py-3 w-full">
                 <div className="flex gap-4 items-center justify-center">
                   <Image
                     src="/images/normal.svg"

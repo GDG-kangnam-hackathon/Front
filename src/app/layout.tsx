@@ -14,9 +14,9 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en">
-      <body className={`antialiased `}>
+      <body className={`antialiased`}>
         <div
-          className="max-w-[600px] m-auto min-h-[100dvh]"
+          className="max-w-[600px] m-auto min-h-[100dvh] mb-5"
           style={{
             backgroundImage: 'url(/images/paper-texture.svg)',
             filter: 'brightness(1.05)',
