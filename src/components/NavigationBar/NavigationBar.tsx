@@ -16,7 +16,7 @@ const NavigationBar = () => {
       >
         <Icon
           icon="fluent-mdl2:sentiment-analysis"
-          className={`w-[31px] h-[31px] ${navigation === 'analyze' ? 'opacity-100' : 'opacity-50'}`}
+          className={`w-[31px] h-[31px] ${navigation === 'analysis' ? 'opacity-100' : 'opacity-50'}`}
         />
         <p
           className={`${navigation === 'analyze' ? 'opacity-100' : 'opacity-50'}`}
