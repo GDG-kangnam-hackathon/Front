@@ -42,6 +42,28 @@ const Calendar = ({ currentDate }: CalendarProps) => {
     fetchDiaryData()
   }, [])
 
+  const handleDiaryUpdate = (newDiary: {
+    date: string
+    emotionType: string
+  }) => {
+    setDiaryData((prev) => ({
+      ...prev,
+      [dayjs(newDiary.date).format('YYYY-MM-DD')]: newDiary.emotionType,
+    }))
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
   const getDaysInMonth = (year: number, month: number) => {
     const firstDayOfMonth = new Date(year, month, 1).getDay()
     const daysInMonth = new Date(year, month + 1, 0).getDate()
@@ -147,7 +169,13 @@ const Calendar = ({ currentDate }: CalendarProps) => {
       </div>
 
       {/* WriteModal */}
-      {isOpen && <WriteModal initialDate={selectedDate} onClose={closeModal} />}
+      {isOpen && (
+        <WriteModal
+          initialDate={selectedDate}
+          onClose={closeModal}
+          onDiaryUpdate={handleDiaryUpdate}
+        />
+      )}
     </div>
   )
 }
