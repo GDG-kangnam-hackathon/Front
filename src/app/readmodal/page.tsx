@@ -105,7 +105,10 @@ const ReadModal = () => {
                 <Button className="w-[200px] h-[64px] rounded-[36px] border-[3px] border-[#BFBFBF] bg-white text-custom-pink text-center font-nanum text-[44px] not-italic font-normal leading-[26px]">
                   수정
                 </Button>
-                <Button className="w-[200px] h-[64px] rounded-[36px] bg-custom-pink text-center font-nanum text-[44px] not-italic font-normal leading-[26px]">
+                <Button
+                  className="w-[200px] h-[64px] rounded-[36px] bg-custom-pink text-center font-nanum text-[44px] not-italic font-normal leading-[26px]"
+                  onClick={handleCloseModal}
+                >
                   확인
                 </Button>
               </div>
