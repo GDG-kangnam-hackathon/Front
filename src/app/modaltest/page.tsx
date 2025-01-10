@@ -52,7 +52,7 @@ const ModalTest = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-center">
             <div
               className={`bg-paper-texture bg-cover brightness-105 rounded-lg shadow-lg w-[37.5rem] h-[70.75rem] p-6 
-                ${animating ? 'animate-fade-out-down' : 'animate-fade-in-up'}`}
+    ${animating ? 'animate-slide-down' : 'animate-slide-up'}`}
             >
               <div className="flex justify-between items-center mb-[2.688rem]">
                 <hr
