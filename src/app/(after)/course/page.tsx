@@ -14,6 +14,7 @@ const CoursePage = () => {
   const [data, setData] = useState<RecommendationSector[]>([])
 
   useEffect(() => {
+    setData([])
     const fetchData = async () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/chatgpt/recommend`,

@@ -82,10 +82,10 @@ export async function GET() {
         include: {
           recommendedJobs: true,
         },
+        orderBy: {
+          fitPercentage: 'desc',
+        },
       },
-    },
-    orderBy: {
-      updatedAt: 'desc',
     },
   })
   return NextResponse.json(recommendations)

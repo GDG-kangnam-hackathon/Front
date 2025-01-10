@@ -20,6 +20,8 @@ export const POST = async (req: Request) => {
   const startDate = new Date()
   startDate.setDate(today.getDate() - during)
 
+  console.log(startDate)
+
   const diaries = await prisma.diary.findMany({
     where: {
       userId: process.env.NEXT_PUBLIC_USER_ID,
@@ -52,6 +54,9 @@ export const POST = async (req: Request) => {
       recommendedSectors: {
         include: {
           recommendedJobs: true,
+        },
+        orderBy: {
+          fitPercentage: 'desc',
         },
       },
     },
