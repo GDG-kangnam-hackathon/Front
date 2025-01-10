@@ -32,36 +32,36 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate }) => {
   const [diaryData, setDiaryData] = useState<
     Record<string, { emotionType: string; diary: any }>
   >({})
+            
+  useEffect(() => {
+    const fetchDiaryData = async () => {
+      try {
+        const response = await fetch(
+          `/api/diary?day=${encodeURIComponent(currentDate.format('YYYY-MM'))}`,
+          {
+            method: 'GET',
+          },
+        )
+        if (!response.ok) throw new Error('Failed to fetch data')
+        const result = await response.json()
 
-  const fetchDiaryData = async () => {
-    try {
-      const response = await fetch('/api/diary')
-      if (!response.ok) throw new Error('Failed to fetch data')
-      const result = await response.json()
+        const diaryMap = result.reduce(
+          (acc: Record<string, string>, diary: any) => {
+            acc[dayjs(diary.date).format('YYYY-MM-DD')] = diary.emotionType
+            return acc
+          },
+          {},
+        )
 
-      const diaryMap = result.reduce(
-        (
-          acc: Record<string, { emotionType: string; diary: any }>,
-          diary: any,
-        ) => {
-          acc[dayjs(diary.date).format('YYYY-MM-DD')] = {
-            emotionType: diary.emotionType,
-            diary,
-          }
-          return acc
-        },
-        {},
-      )
-
-      setDiaryData(diaryMap)
-    } catch (error) {
-      console.error(error)
+        setDiaryData(diaryMap)
+      } catch (error) {
+        console.error(error)
     }
   }
 
   useEffect(() => {
     fetchDiaryData()
-  }, [])
+  }, [currentDate])
 
   const handleDiaryUpdate = (newDiary: {
     date: string

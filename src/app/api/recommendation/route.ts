@@ -11,13 +11,23 @@ export interface gptResponse {
 }
 
 export async function POST(req: Request) {
-  const gptResponse: gptResponse = await req.json()
+  const { gptResponse: gptResponse, diaries } = await req.json()
 
   const recommendation = await prisma.recommendation.create({
     data: {
       userId: process.env.USER_ID as string,
+      diaries: {
+        connect: diaries.map((diary: { id: string }) => ({ id: diary.id })),
+      },
     },
   })
+  for (const diary of diaries) {
+    await prisma.diary.update({
+      where: { id: diary.id },
+      data: { recommendationId: recommendation.id },
+    })
+  }
+
   for (const sector of gptResponse.sectors) {
     const createdSector = await prisma.recommendationSector.create({
       data: {
