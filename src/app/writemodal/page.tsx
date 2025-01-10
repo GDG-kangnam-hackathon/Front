@@ -8,15 +8,15 @@ import { Button } from '@/components/ui/button'
 import useForm from '@/hooks/useForm'
 import Slider from '@/components/ui/slider'
 
-const ModalTest = () => {
+const WriteModal = () => {
   const { isOpen, openModal, closeModal } = useModal()
-  const { handleChange, handleSubmit } = useForm()
+  const { formData, handleChange } = useForm()
   const [animating, setAnimating] = useState(false)
   const [selectedEmotion, setSelectedEmotion] = useState<string>('')
 
   const handleOpenModal = () => {
-    setSelectedEmotion('Joy') // Default to "Joy"
-    handleChange('selectedEmotion', 'Joy') // Update useForm state
+    setSelectedEmotion('Joy')
+    handleChange('selectedEmotion', 'Joy')
     openModal()
   }
 
@@ -28,9 +28,31 @@ const ModalTest = () => {
     }, 500)
   }
 
-  const handleFormSubmit = () => {
-    handleSubmit()
-    handleCloseModal()
+  const handleFormSubmit = async () => {
+    try {
+      const currentDate = new Date().toISOString() // 현재 날짜를 ISO 8601 형식으로 변환
+      const response = await fetch('/api/diary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date: currentDate,
+          content: formData.dayFeeling, // dayFeeling을 content로 매핑
+          emotionType: formData.selectedEmotion, // selectedEmotion을 emotionType으로 매핑
+          emotionScore: formData.emotionScore,
+          reason: formData.reason,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to save diary')
+      }
+
+      const data = await response.json()
+      console.log('Diary saved successfully:', data)
+      handleCloseModal()
+    } catch (error) {
+      console.error('Error submitting form:', error)
+    }
   }
 
   const handleEmotionSelect = (emotion: string) => {
@@ -133,4 +155,4 @@ const ModalTest = () => {
   )
 }
 
-export default ModalTest
+export default WriteModal
