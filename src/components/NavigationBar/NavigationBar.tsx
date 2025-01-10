@@ -1,23 +1,18 @@
 'use client'
 
 import { Icon } from '@iconify/react'
+import { usePathname, useRouter } from 'next/navigation'
 
-const NavigationBar = ({
-  navigation,
-  setNavigation,
-}: {
-  navigation: string
-  setNavigation: (value: string) => void
-}) => {
-  const handleClick = (value: string) => {
-    setNavigation(value) // Update the navigation state
-  }
+const NavigationBar = () => {
+  const router = useRouter()
+  const pathname = usePathname()
+  const navigation = pathname.split('/').pop()
 
   return (
     <div className="flex w-full items-center justify-around bg-white font-nanum text-[22px] py-1 border-t border-b border-t-1 border-b-1 border-[#D9D9D9] px-6">
       <div
         className="flex flex-col gap-1 items-center cursor-pointer"
-        onClick={() => handleClick('analyze')}
+        onClick={() => router.push('/analyze')}
       >
         <Icon
           icon="fluent-mdl2:sentiment-analysis"
@@ -31,7 +26,7 @@ const NavigationBar = ({
       </div>
       <div
         className="flex flex-col gap-1 items-center cursor-pointer"
-        onClick={() => handleClick('home')}
+        onClick={() => router.push('/home')}
       >
         <Icon
           icon="hugeicons:pencil"
@@ -45,7 +40,7 @@ const NavigationBar = ({
       </div>
       <div
         className="flex flex-col gap-1 items-center cursor-pointer"
-        onClick={() => handleClick('course')}
+        onClick={() => router.push('/course')}
       >
         <Icon
           icon="solar:branching-paths-down-broken"
