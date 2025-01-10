@@ -53,53 +53,65 @@ export const POST = async (req: Request) => {
       {
         role: 'system',
         content: `
-사용자의 다이어리 데이터를 분석하여 감정 분포와 주요 활동 점수를 JSON 형식으로 반환하세요. 
-활동 점수를 기반으로 활동을 "좋은 활동"과 "안좋은 활동"으로 분류하세요.
+Analyze the user's diary data and return the emotional distribution and the scores of major activities in JSON format. Classify activities as "good activities" or "bad activities" based on their scores.
 
-1. **분석 대상**:
-   - 감정 분포(행복, 슬픔, 분노, 스트레스 등).
-   - 주요 활동(활동명과 점수 포함).
+1. **Analysis Targets**:
+   - Emotional distribution (e.g., joy, sadness, happiness, anger, neutral).
+   - Major activities (including activity names and scores).
 
-2. **분석 기준**:
-   - 감정 분포는 백분율로 계산.
-   - 활동 점수는 감정 점수를 기반으로 계산:
-     - 긍정적 감정(행복, 기쁨 등)은 80~100점.
-     - 부정적 감정(분노, 스트레스 등)은 1~50점.
-   - 특정 활동이 반복될수록 점수를 증가.
-   - 활동 점수가 50점 이상이면 "좋은 활동", 50점 미만이면 "안좋은 활동"으로 분류.
+2. **Analysis Criteria**:
+   - Calculate emotional distribution in percentages for ["joy", "sadness", "happiness", "anger", "neutral"].
+   - Ignore any diary entries where the emotion is "interest".
+   - Activity scores are based on emotional scores:
+     - Positive emotions (happiness, joy, etc.): 80~100 points.
+     - Negative emotions (anger, stress, etc.): 1~50 points.
+   - The more frequently an activity is repeated, the higher its score.
+   - Activities with scores of 50 or more are classified as "good activities," and activities with scores below 50 are classified as "bad activities."
+   - Limit both "good activities" and "bad activities" to a maximum of 3 each.
 
-3. **출력 형식**:
-   JSON 형식:
+3. **Output Format**:
+   JSON format:
    {
      "emotionDistribution": {
-       "행복": 40,
+       "기쁨": 30,
        "슬픔": 30,
-       "분노": 20,
-       "스트레스": 10
+       "행복": 20,
+       "화남": 10,
+       "보통": 5
      },
      "activities": {
        "goodActivities": [
          {
-           "name": "좋은 활동명",
+           "name": "Good Activity Name",
            "score": 85
          },
          {
-           "name": "좋은 활동명2",
+           "name": "Good Activity Name 2",
            "score": 90
+         },
+         {
+           "name": "Good Activity Name 3",
+           "score": 75
          }
        ],
        "badActivities": [
          {
-           "name": "안좋은 활동명",
+           "name": "Bad Activity Name",
            "score": 40
          },
          {
-           "name": "안좋은 활동명2",
+           "name": "Bad Activity Name 2",
            "score": 30
+         },
+         {
+           "name": "Bad Activity Name 3",
+           "score": 25
          }
        ]
      }
    }
+
+The final output must be returned in Korean, and any diary entries with the emotion "흥미" must be ignored.
 `,
       },
       {
@@ -110,6 +122,8 @@ export const POST = async (req: Request) => {
   })
 
   const gptResponse = JSON.parse(response.choices[0].message.content as string)
+
+  console.log(gptResponse)
 
   for (const activity of gptResponse.activities.goodActivities) {
     const response = await fetch(

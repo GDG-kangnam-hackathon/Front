@@ -90,7 +90,7 @@ const WriteModal = () => {
               </p>
               <div className="flex justify-center mb-[162.5px]">
                 <Textarea
-                  className="border-0 w-[10.188rem] h-[2rem] text-gray-500 text-center font-nanum text-2xl not-italic font-normal leading-normal resize-none"
+                  className="border-0 h-[2rem] text-gray-500 text-center font-nanum text-2xl not-italic font-normal leading-normal resize-none"
                   placeholder="내용을 입력하세요."
                   onChange={(e) => handleChange('dayFeeling', e.target.value)}
                 ></Textarea>
