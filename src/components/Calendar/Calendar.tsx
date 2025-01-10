@@ -21,7 +21,12 @@ const Calendar = ({ currentDate }: CalendarProps) => {
   useEffect(() => {
     const fetchDiaryData = async () => {
       try {
-        const response = await fetch('/api/diary')
+        const response = await fetch(
+          `/api/diary?day=${encodeURIComponent(currentDate.format('YYYY-MM'))}`,
+          {
+            method: 'GET',
+          },
+        )
         if (!response.ok) throw new Error('Failed to fetch data')
         const result = await response.json()
 
@@ -40,7 +45,7 @@ const Calendar = ({ currentDate }: CalendarProps) => {
     }
 
     fetchDiaryData()
-  }, [])
+  }, [currentDate])
 
   const getDaysInMonth = (year: number, month: number) => {
     const firstDayOfMonth = new Date(year, month, 1).getDay()

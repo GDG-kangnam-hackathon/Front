@@ -15,7 +15,13 @@ const CoursePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/recommendation`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/chatgpt/recommend`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
       )
       const res = await response.json()
       setData(res.recommendedSectors || [])
