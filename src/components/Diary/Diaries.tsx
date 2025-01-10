@@ -22,7 +22,7 @@ const Diaries = ({ diaries }: { diaries: Diary[] }) => {
         const isToday = formatDate.startsWith(today)
 
         return (
-          <div key={diary.id} className="flex flex-col gap-4">
+          <div key={diary.id} className="flex flex-col ">
             <div className="flex gap-5 items-center py-6">
               <Image src={turtleImage} alt="turtle" width={20} height={26} />
               <div
@@ -31,21 +31,31 @@ const Diaries = ({ diaries }: { diaries: Diary[] }) => {
                 {formatDate}
               </div>
             </div>
-            <div className="flex flex-col gap-3 px-12">
-              <div className="flex gap-4 items-center justify-center">
-                <Image
-                  src="/images/normal.svg"
-                  alt="interest"
-                  width={65}
-                  height={56}
-                />
-                <p className="font-nanum text-[40px]">
-                  {diary.emotionType} {diary.emotionScore} 점
+            <div className="flex">
+              <span
+                className="border-l-2 border-dashed border-[#D9D9D9] ml-2"
+                style={{
+                  borderImage:
+                    'repeating-linear-gradient(to bottom, transparent, transparent 10px, #D9D9D9 10px, #D9D9D9 20px) 1',
+                }}
+              ></span>
+
+              <div className="flex flex-col gap-3 px-12 py-3">
+                <div className="flex gap-4 items-center justify-center">
+                  <Image
+                    src="/images/normal.svg"
+                    alt="interest"
+                    width={65}
+                    height={56}
+                  />
+                  <p className="font-nanum text-[40px]">
+                    {diary.emotionType} {diary.emotionScore} 점
+                  </p>
+                </div>
+                <p className="font-nanum text-[30px] text-[#838383] overflow-hidden text-ellipsis line-clamp-2">
+                  {diary.content}
                 </p>
               </div>
-              <p className="font-nanum text-[30px] text-[#838383] overflow-hidden text-ellipsis line-clamp-2">
-                {diary.content}
-              </p>
             </div>
           </div>
         )

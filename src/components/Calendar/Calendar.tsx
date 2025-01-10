@@ -66,16 +66,14 @@ const Calendar = ({ currentDate }: CalendarProps) => {
         {calendar.map((week, weekIndex) => (
           <div
             key={weekIndex}
-            className={
-              'flex items-center justify-between bg-white border-t border-b'
-            }
+            className="relative flex items-center justify-between bg-white border-t border-b"
           >
             {week.map((date, dayIndex) => (
               <div
                 key={dayIndex}
-                className={`flex w-full h-[55px] items-center justify-center font-inter text-[14px] text-cente cursor-pointer ${
+                className={`flex w-full h-[55px] items-center justify-center font-inter text-[14px] text-center cursor-pointer ${
                   date.isCurrentMonth
-                    ? 'border-t-[2.5px] border-b-[2.5px] border-[##D9D9D9] text-[#7F7F7F]' // 현재 달 날짜 스타일
+                    ? 'border-t-[2.5px] border-b-[2.5px] border-[#D9D9D9] text-[#7F7F7F]' // 현재 달 날짜 스타일
                     : 'text-[#bcbcbc]' // 다른 달 날짜 스타일
                 } ${
                   date.isCurrentMonth && date.day === 1
@@ -97,7 +95,11 @@ const Calendar = ({ currentDate }: CalendarProps) => {
                 }`}
                 onClick={() => console.log('Clicked:', date.day)}
               >
-                {date.day}
+                <div className="flex gap-2 items-center">
+                  <span className="bg-[#F0F0F0] w-5 h-[2px] rounded"></span>
+                  {date.day}
+                  <span className="bg-[#F0F0F0] w-5 h-[2px] rounded"></span>
+                </div>
               </div>
             ))}
           </div>

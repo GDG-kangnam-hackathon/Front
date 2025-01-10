@@ -8,7 +8,7 @@ import { Diary } from '../api/diary/model'
 import dayjs from 'dayjs'
 import Analysis from '../analysis/page'
 
-const Main = () => {
+const Home = () => {
   const [navigation, setNavigation] = useState('home')
   const [diaries, setDiaries] = useState<Diary[]>([])
   const [currentDate, setCurrentDate] = useState(dayjs()) // 현재 날짜 상태 추가
@@ -28,7 +28,7 @@ const Main = () => {
     }
 
     fetchDiaries()
-  }, []) // 빈 배열을 의존성 배열로 추가하여 컴포넌트 마운트 시 한 번만 실행
+  }, [])
 
   // 이전 달로 이동
   const handlePrevMonth = () => {
@@ -40,7 +40,6 @@ const Main = () => {
     setCurrentDate(currentDate.add(1, 'month'))
   }
 
-  // 현재 월 텍스트 포맷 (예: 2025년 1월)
   const currentMonthText = currentDate.format('YYYY년 M월')
 
   return (
@@ -99,4 +98,4 @@ const Main = () => {
   )
 }
 
-export default Main
+export default Home
