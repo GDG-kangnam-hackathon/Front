@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Diary } from '@/app/api/diary/model'
 import { Icon } from '@iconify/react/dist/iconify.js'
-import EmotionImage from './emotion'
+import EmotionImage, { Emotion } from './emotion'
 
 interface ReadModalProps {
   isOpen: boolean
@@ -66,7 +66,7 @@ const ReadModal: React.FC<ReadModalProps> = ({
         </p>
         <div className="flex justify-center items-center flex-col">
           <EmotionImage
-            emotion={diary?.emotionType}
+            emotion={diary?.emotionType as Emotion}
             showText={false}
             isSelected={true}
           />

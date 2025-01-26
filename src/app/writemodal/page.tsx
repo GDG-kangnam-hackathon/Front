@@ -101,14 +101,7 @@ const WriteModal = () => {
               <div className="flex justify-center mb-[2rem]">
                 <div className="flex gap-4 overflow-x-scroll w-full px-4">
                   {(
-                    [
-                      'Joy',
-                      'Sad',
-                      'Happy',
-                      'Angry',
-                      'Normal',
-                      'Interest',
-                    ] as const
+                    ['기쁨', '슬픔', '행복', '화남', '보통', '흥미'] as const
                   ).map((emotion) => (
                     <EmotionImage
                       key={emotion}

@@ -62,7 +62,7 @@ const WriteModal: React.FC<WriteModalProps> = ({
     <div>
       <div className="fixed h-[100dvh] inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-center">
         <div
-          className={`bg-paper-texture bg-cover brightness-105 rounded-lg shadow-lg w-[37.5rem] h-[70.75rem] p-6 
+          className={`bg-paper-texture bg-cover brightness-105 overflow-auto rounded-lg shadow-lg w-[37.5rem] max-h-[80dvh] p-6 pb-[100px]
           ${animating ? 'animate-slide-down' : 'animate-slide-up'}`}
         >
           <div className="absolute top-[-50px] left-4">
@@ -116,7 +116,6 @@ const WriteModal: React.FC<WriteModalProps> = ({
           <div className="flex justify-center mb-[8.5rem]">
             <Slider
               max={10}
-              value={formData.emotionScore}
               onChange={(value: number) => handleChange('emotionScore', value)}
             />
           </div>
